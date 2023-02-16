@@ -4,8 +4,9 @@ import java.util.*;
 
 public record Plateau(int dimX, int dimY, List<Rover> rovers) {
 
-	public void addRover(Rover rover) {
+	public Plateau addRover(Rover rover) {
 		this.rovers.add(rover);
+		return this;
 	}
 	
 	public boolean isOccupied(Rover rover) {
