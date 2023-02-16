@@ -21,7 +21,7 @@ public class Rover {
 	private Heading heading;
 	private Plateau plateau;
 
-	public void drop(Plateau plateau) {
+	private void drop(Plateau plateau) {
 		checkPosition();
 		plateau.addRover(this);
 	}
