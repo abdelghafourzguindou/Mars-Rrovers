@@ -75,7 +75,7 @@ public class Rover {
 		Position newPosition = switch (heading) {
 			case EAST -> new Position(position.x() + 1, position.y());
 			case NORTH -> new Position(position.x(), position.y() + 1);
-			case WEST -> new Position(position.x()- 1, position.y());
+			case WEST -> new Position(position.x() - 1, position.y());
 			case SOUTH -> new Position(position.x(), position.y() - 1);
 		};
 		checkPosition();

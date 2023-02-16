@@ -12,6 +12,6 @@ public record Position(int x, int y) {
 	}
 	
 	public boolean isOnPlateau(Plateau plateau) {
-		return this.x >= 0 && this.x <= plateau.dimY() && this.y >= 0 && this.y <= plateau.dimY();
+		return this.x >= 0 && this.x <= plateau.dimX() && this.y >= 0 && this.y <= plateau.dimY();
 	}
 }
