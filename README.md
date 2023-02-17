@@ -110,3 +110,11 @@ To run your existing tests in a native image, run the following goal:
 $ ./mvnw test -PnativeTest
 ```
 
+### How to use
+
+Run the application (Server)
+Connect to it using 
+```
+nc "machine" "80" // nc localhost 80
+```
+Enjoy !!!!
