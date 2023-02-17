@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.nasa.mars.rovers.model.Plateau;
 import org.springframework.stereotype.Service;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import static org.nasa.mars.rovers.service.Utils.delimiter;
@@ -19,7 +20,7 @@ public class PlateauService {
         return new Plateau(dimX, dimY, new ArrayList<>());
     }
 
-    public void printInfos(Plateau plateau) {
-        plateau.rovers().forEach(rover -> System.out.println(rover.printInfo()));
+    public void printInfos(PrintWriter out, Plateau plateau) {
+        plateau.rovers().forEach(rover -> out.println(rover.printInfo()));
     }
 }
