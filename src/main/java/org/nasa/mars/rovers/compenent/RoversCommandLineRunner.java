@@ -1,7 +1,10 @@
-package org.nasa.mars.rovers;
+package org.nasa.mars.rovers.compenent;
 
+import org.nasa.mars.rovers.model.Instruction;
 import org.nasa.mars.rovers.service.PlateauService;
 import org.nasa.mars.rovers.service.RoverService;
+import org.nasa.mars.rovers.model.Worker;
+import org.nasa.mars.rovers.utils.Utils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -10,15 +13,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public record RoversCommandLineRunner(PlateauService plateauService, RoverService roverService) implements CommandLineRunner {
-    private static final String quitter = "q";
 
     @Override
     public void run(String... args) throws IOException {
         System.out.print("Starting at 80");
-
         try (var serverSocket = new ServerSocket(80)) {
             var clientSocket = serverSocket.accept();
             var in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -26,11 +30,19 @@ public record RoversCommandLineRunner(PlateauService plateauService, RoverServic
 
             out.println("Welcome to Mars rovers!");
 
-            roversProcessor(in, out);
+            var workers = createWorkers(in, out);
+
+            out.println("The new positions are!");
+
+            workers.parallelStream()
+                    .map(Worker::start)
+                    .map(CompletableFuture::join)
+                    .forEach(rover -> out.println(rover.printInfo()));
         }
     }
 
-    private void roversProcessor(BufferedReader in, PrintWriter out) {
+    private List<Worker> createWorkers(BufferedReader in, PrintWriter out) {
+        var workers = new ArrayList<Worker>();
         try {
             out.println("Enter the plateau dimension!");
             var plateauInfos = in.readLine();
@@ -38,19 +50,19 @@ public record RoversCommandLineRunner(PlateauService plateauService, RoverServic
 
             out.println("Enter the instructions and Press q to quite!");
 
-            var infos = in.readLine() ;
+            var infos = in.readLine();
 
-            while (!quitter.equals(infos)) {
+            while (!Utils.quitter.equals(infos)) {
                 var rover = roverService.createRover(infos, plateau);
                 infos = in.readLine();
-                roverService.processInstruction(rover, infos);
+                workers.add(new Worker(rover, Instruction.toList(infos)));
                 infos = in.readLine();
             }
 
-            out.println("The new locations are!");
-            plateauService.printInfos(out, plateau);
         } catch (Exception e) {
             out.println("Error -> " + e.getMessage());
         }
+
+        return workers;
     }
 }

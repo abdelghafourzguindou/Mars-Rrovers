@@ -6,11 +6,6 @@ import org.nasa.mars.rovers.exception.RoverNotDroppedException;
 
 import java.util.List;
 
-import static org.nasa.mars.rovers.model.Direction.EAST;
-import static org.nasa.mars.rovers.model.Direction.NORTH;
-import static org.nasa.mars.rovers.model.Direction.SOUTH;
-import static org.nasa.mars.rovers.model.Direction.WEST;
-
 @AllArgsConstructor
 @Getter
 public class Rover {
@@ -30,12 +25,13 @@ public class Rover {
 	public boolean hasPosition(Coordinate coordinate) {
 		return this.coordinate.equals(coordinate);
 	}
-	
-	public void processInstructions(List<Instruction> instructions) {
+
+	public Rover process(List<Instruction> instructions) {
 		if (coordinate == null || direction == null) {
 			throw new RoverNotDroppedException();
 		}
-		instructions.forEach(this::processInstruction);
+		instructions.forEach(this::execute);
+		return this;
 	}
 
 	private void drop(Plateau plateau) {
@@ -43,7 +39,7 @@ public class Rover {
 		plateau.drop(this);
 	}
 
-	private void processInstruction(Instruction instruction) {
+	private void execute(Instruction instruction) {
 		switch (instruction) {
 			case LEFT -> direction = turnLeft();
 			case RIGHT -> direction = turnRight();
@@ -52,21 +48,11 @@ public class Rover {
 	}
 
 	private Direction turnLeft() {
-		return switch (direction) {
-			case EAST -> NORTH;
-			case NORTH -> WEST;
-			case WEST -> SOUTH;
-			case SOUTH -> EAST;
-		};
+		return this.direction.left();
 	}
 
 	private Direction turnRight() {
-		return switch (direction) {
-			case EAST -> SOUTH;
-			case NORTH -> EAST;
-			case WEST -> NORTH;
-			case SOUTH -> WEST;
-		};
+		return this.direction.right();
 	}
 
 	private Coordinate moveForward() {

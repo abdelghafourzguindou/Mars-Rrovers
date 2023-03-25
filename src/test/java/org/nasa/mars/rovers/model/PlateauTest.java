@@ -3,7 +3,7 @@ package org.nasa.mars.rovers.model;
 import org.junit.jupiter.api.Test;
 import org.nasa.mars.rovers.exception.CoordinateOccupiedException;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -14,7 +14,7 @@ class PlateauTest {
     @Test
     void addRover() {
         var coordinate = new Coordinate(1, 2);
-        var plateau = new Plateau(5, 5, new ArrayList<>());
+        var plateau = new Plateau(5, 5, new ConcurrentLinkedDeque<>());
         var rover1 = new Rover(coordinate, Direction.NORTH, plateau);
         var rover2 = new Rover(coordinate, Direction.NORTH, plateau);
 
@@ -27,7 +27,7 @@ class PlateauTest {
     @Test
     void isOccupied() {
         var coordinate = new Coordinate(1, 2);
-        var plateau = new Plateau(5, 5, new ArrayList<>());
+        var plateau = new Plateau(5, 5, new ConcurrentLinkedDeque<>());
         var rover1 = new Rover(coordinate, Direction.NORTH, plateau);
         var rover2 = new Rover(coordinate, Direction.NORTH, plateau);
 

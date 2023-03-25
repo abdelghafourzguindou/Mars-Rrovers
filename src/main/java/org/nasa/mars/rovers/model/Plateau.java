@@ -3,9 +3,9 @@ package org.nasa.mars.rovers.model;
 import org.nasa.mars.rovers.exception.CoordinateNotOnPlateauException;
 import org.nasa.mars.rovers.exception.CoordinateOccupiedException;
 
-import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
-public record Plateau(int width, int height, List<Rover> rovers) {
+public record Plateau(int width, int height, ConcurrentLinkedDeque<Rover> rovers) {
 
 	public Plateau drop(Rover rover) {
 		this.rovers.add(rover);

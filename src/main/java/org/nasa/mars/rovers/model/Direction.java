@@ -20,4 +20,22 @@ public enum Direction {
 				.findFirst()
 				.orElseThrow(() -> new UnknownDirectionException(code));
 	}
+
+	public Direction left() {
+		return switch (this) {
+			case EAST -> NORTH;
+			case NORTH -> WEST;
+			case WEST -> SOUTH;
+			case SOUTH -> EAST;
+		};
+	}
+
+	public Direction right() {
+		return switch (this) {
+			case EAST -> SOUTH;
+			case NORTH -> EAST;
+			case WEST -> NORTH;
+			case SOUTH -> WEST;
+		};
+	}
 }

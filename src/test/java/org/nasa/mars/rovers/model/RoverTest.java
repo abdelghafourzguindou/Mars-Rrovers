@@ -2,8 +2,8 @@ package org.nasa.mars.rovers.model;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.nasa.mars.rovers.model.Instruction.LEFT;
@@ -14,7 +14,7 @@ class RoverTest {
     @Test
     void drop() {
         var coordinate = new Coordinate(1, 2);
-        var plateau = new Plateau(5, 5, new ArrayList<>());
+        var plateau = new Plateau(5, 5, new ConcurrentLinkedDeque<>());
         var rover = new Rover(coordinate, Direction.NORTH, plateau);
 
         rover.drop();
@@ -25,7 +25,7 @@ class RoverTest {
     @Test
     void hasPosition() {
         var coordinate = new Coordinate(1, 2);
-        var plateau = new Plateau(5, 5, new ArrayList<>());
+        var plateau = new Plateau(5, 5, new ConcurrentLinkedDeque<>());
         var rover = new Rover(coordinate, Direction.NORTH, plateau);
 
         assertThat(rover.hasPosition(coordinate)).isTrue();
@@ -34,11 +34,11 @@ class RoverTest {
     @Test
     void processInstructions() {
         var coordinate = new Coordinate(1, 2);
-        var plateau = new Plateau(5, 5, new ArrayList<>());
+        var plateau = new Plateau(5, 5, new ConcurrentLinkedDeque<>());
         var rover = new Rover(coordinate, Direction.NORTH, plateau);
 
         rover.drop();
-        rover.processInstructions(List.of(LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, MOVE));
+        rover.process(List.of(LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, MOVE));
 
         assertThat(rover.getCoordinate().x()).isEqualTo(1);
         assertThat(rover.getCoordinate().y()).isEqualTo(3);
