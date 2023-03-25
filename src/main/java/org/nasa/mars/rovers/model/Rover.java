@@ -3,58 +3,56 @@ package org.nasa.mars.rovers.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.nasa.mars.rovers.exception.RoverNotDroppedException;
-import org.nasa.mars.rovers.exception.PositionNotOnPlateauException;
-import org.nasa.mars.rovers.exception.PositionOccupiedException;
 
 import java.util.List;
 
-import static org.nasa.mars.rovers.model.Heading.EAST;
-import static org.nasa.mars.rovers.model.Heading.NORTH;
-import static org.nasa.mars.rovers.model.Heading.SOUTH;
-import static org.nasa.mars.rovers.model.Heading.WEST;
+import static org.nasa.mars.rovers.model.Direction.EAST;
+import static org.nasa.mars.rovers.model.Direction.NORTH;
+import static org.nasa.mars.rovers.model.Direction.SOUTH;
+import static org.nasa.mars.rovers.model.Direction.WEST;
 
 @AllArgsConstructor
 @Getter
 public class Rover {
 
-	private Position position;
-	private Heading heading;
+	private Coordinate coordinate;
+	private Direction direction;
 	private Plateau plateau;
-
-	private void drop(Plateau plateau) {
-		checkPosition();
-		plateau.addRover(this);
-	}
 
 	public void drop() {
 		drop(this.plateau);
 	}
 
 	public String printInfo() {
-		return position.toString() + " " + heading.getLetter();
+		return coordinate.toString() + " " + direction.getCode();
 	}
 
-	public boolean hasPosition(Position position) {
-		return this.position.isEqual(position);
+	public boolean hasPosition(Coordinate coordinate) {
+		return this.coordinate.equals(coordinate);
 	}
 	
 	public void processInstructions(List<Instruction> instructions) {
-		if (position == null || heading == null) {
+		if (coordinate == null || direction == null) {
 			throw new RoverNotDroppedException();
 		}
 		instructions.forEach(this::processInstruction);
 	}
 
+	private void drop(Plateau plateau) {
+		plateau.checkCoordinate(this.coordinate);
+		plateau.drop(this);
+	}
+
 	private void processInstruction(Instruction instruction) {
 		switch (instruction) {
-			case LEFT -> heading = turnLeft();
-			case RIGHT -> heading = turnRight();
-			case MOVE -> position = moveForward();
+			case LEFT -> direction = turnLeft();
+			case RIGHT -> direction = turnRight();
+			case MOVE -> coordinate = moveForward();
 		}
 	}
 
-	private Heading turnLeft() {
-		return switch (heading) {
+	private Direction turnLeft() {
+		return switch (direction) {
 			case EAST -> NORTH;
 			case NORTH -> WEST;
 			case WEST -> SOUTH;
@@ -62,8 +60,8 @@ public class Rover {
 		};
 	}
 
-	private Heading turnRight() {
-		return switch (heading) {
+	private Direction turnRight() {
+		return switch (direction) {
 			case EAST -> SOUTH;
 			case NORTH -> EAST;
 			case WEST -> NORTH;
@@ -71,23 +69,15 @@ public class Rover {
 		};
 	}
 
-	private Position moveForward() {
-		Position newPosition = switch (heading) {
-			case EAST -> new Position(position.x() + 1, position.y());
-			case NORTH -> new Position(position.x(), position.y() + 1);
-			case WEST -> new Position(position.x() - 1, position.y());
-			case SOUTH -> new Position(position.x(), position.y() - 1);
+	private Coordinate moveForward() {
+		Coordinate newCoordinate = switch (direction) {
+			case EAST -> new Coordinate(coordinate.x() + 1, coordinate.y());
+			case NORTH -> new Coordinate(coordinate.x(), coordinate.y() + 1);
+			case WEST -> new Coordinate(coordinate.x() - 1, coordinate.y());
+			case SOUTH -> new Coordinate(coordinate.x(), coordinate.y() - 1);
 		};
-		checkPosition();
-		return newPosition;
+		plateau.checkCoordinate(newCoordinate);
+		return newCoordinate;
 	}
 
-	private void checkPosition() {
-		if (!position.isOnPlateau(plateau)) {
-			throw new PositionNotOnPlateauException();
-		}
-		if (plateau.isOccupied(this)) {
-			throw new PositionOccupiedException();
-		}
-	}
 }

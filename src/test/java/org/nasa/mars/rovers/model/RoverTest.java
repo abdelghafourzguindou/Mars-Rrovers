@@ -13,9 +13,9 @@ class RoverTest {
 
     @Test
     void drop() {
-        var position = new Position(1, 2);
+        var coordinate = new Coordinate(1, 2);
         var plateau = new Plateau(5, 5, new ArrayList<>());
-        var rover = new Rover(position, Heading.NORTH, plateau);
+        var rover = new Rover(coordinate, Direction.NORTH, plateau);
 
         rover.drop();
 
@@ -24,24 +24,24 @@ class RoverTest {
 
     @Test
     void hasPosition() {
-        var position = new Position(1, 2);
+        var coordinate = new Coordinate(1, 2);
         var plateau = new Plateau(5, 5, new ArrayList<>());
-        var rover = new Rover(position, Heading.NORTH, plateau);
+        var rover = new Rover(coordinate, Direction.NORTH, plateau);
 
-        assertThat(rover.hasPosition(position)).isTrue();
+        assertThat(rover.hasPosition(coordinate)).isTrue();
     }
 
     @Test
     void processInstructions() {
-        var position = new Position(1, 2);
+        var coordinate = new Coordinate(1, 2);
         var plateau = new Plateau(5, 5, new ArrayList<>());
-        var rover = new Rover(position, Heading.NORTH, plateau);
+        var rover = new Rover(coordinate, Direction.NORTH, plateau);
 
         rover.drop();
         rover.processInstructions(List.of(LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, MOVE));
 
-        assertThat(rover.getPosition().x()).isEqualTo(1);
-        assertThat(rover.getPosition().y()).isEqualTo(3);
-        assertThat(rover.getHeading()).isEqualTo(Heading.NORTH);
+        assertThat(rover.getCoordinate().x()).isEqualTo(1);
+        assertThat(rover.getCoordinate().y()).isEqualTo(3);
+        assertThat(rover.getDirection()).isEqualTo(Direction.NORTH);
     }
 }

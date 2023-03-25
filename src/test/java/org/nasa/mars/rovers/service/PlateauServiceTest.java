@@ -12,8 +12,8 @@ class PlateauServiceTest {
     @Test
     void createPlateau() {
         var plateau = plateauService.createPlateau("5 5");
-        assertThat(plateau.dimX()).isEqualTo(5);
-        assertThat(plateau.dimY()).isEqualTo(5);
+        assertThat(plateau.width()).isEqualTo(5);
+        assertThat(plateau.height()).isEqualTo(5);
     }
 
     @Test

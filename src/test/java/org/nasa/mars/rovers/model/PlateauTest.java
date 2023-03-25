@@ -1,21 +1,24 @@
 package org.nasa.mars.rovers.model;
 
 import org.junit.jupiter.api.Test;
+import org.nasa.mars.rovers.exception.CoordinateOccupiedException;
 
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class PlateauTest {
 
     @Test
     void addRover() {
-        var position = new Position(1, 2);
+        var coordinate = new Coordinate(1, 2);
         var plateau = new Plateau(5, 5, new ArrayList<>());
-        var rover1 = new Rover(position, Heading.NORTH, plateau);
-        var rover2 = new Rover(position, Heading.NORTH, plateau);
+        var rover1 = new Rover(coordinate, Direction.NORTH, plateau);
+        var rover2 = new Rover(coordinate, Direction.NORTH, plateau);
 
-        plateau.addRover(rover1).addRover(rover2);
+        plateau.drop(rover1).drop(rover2);
 
         assertThat(rover1).isIn(plateau.rovers());
         assertThat(rover2).isIn(plateau.rovers());
@@ -23,13 +26,13 @@ class PlateauTest {
 
     @Test
     void isOccupied() {
-        var position = new Position(1, 2);
+        var coordinate = new Coordinate(1, 2);
         var plateau = new Plateau(5, 5, new ArrayList<>());
-        var rover1 = new Rover(position, Heading.NORTH, plateau);
-        var rover2 = new Rover(position, Heading.NORTH, plateau);
+        var rover1 = new Rover(coordinate, Direction.NORTH, plateau);
+        var rover2 = new Rover(coordinate, Direction.NORTH, plateau);
 
-        assertThat(plateau.isOccupied(rover1)).isFalse();
+        assertThatCode(() -> plateau.checkCoordinate(rover1.getCoordinate())).doesNotThrowAnyException();
         rover1.drop();
-        assertThat(plateau.isOccupied(rover2)).isTrue();
+        assertThatExceptionOfType(CoordinateOccupiedException.class).isThrownBy(() -> plateau.checkCoordinate(rover2.getCoordinate()));
     }
 }

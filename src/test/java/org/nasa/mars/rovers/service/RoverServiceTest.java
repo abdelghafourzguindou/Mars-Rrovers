@@ -1,8 +1,8 @@
 package org.nasa.mars.rovers.service;
 
 import org.junit.jupiter.api.Test;
-import org.nasa.mars.rovers.exception.PositionNotOnPlateauException;
-import org.nasa.mars.rovers.exception.UnknownHeadingException;
+import org.nasa.mars.rovers.exception.CoordinateNotOnPlateauException;
+import org.nasa.mars.rovers.exception.UnknownDirectionException;
 import org.nasa.mars.rovers.exception.UnknownInstructionException;
 import org.nasa.mars.rovers.model.Plateau;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.nasa.mars.rovers.model.Heading.NORTH;
+import static org.nasa.mars.rovers.model.Direction.NORTH;
 
 class RoverServiceTest {
 
@@ -21,16 +21,16 @@ class RoverServiceTest {
         var plateau = new Plateau(5, 5, new ArrayList<>());
         var rover = roverService.createRover("1 2 N", plateau);
 
-        assertThat(rover.getPosition().x()).isEqualTo(1);
-        assertThat(rover.getPosition().y()).isEqualTo(2);
-        assertThat(rover.getHeading()).isEqualTo(NORTH);
+        assertThat(rover.getCoordinate().x()).isEqualTo(1);
+        assertThat(rover.getCoordinate().y()).isEqualTo(2);
+        assertThat(rover.getDirection()).isEqualTo(NORTH);
         assertThat(rover).isIn(plateau.rovers());
     }
 
     @Test
     void createRoverNotWorking() {
         var plateau = new Plateau(5, 5, new ArrayList<>());
-        assertThatExceptionOfType(UnknownHeadingException.class)
+        assertThatExceptionOfType(UnknownDirectionException.class)
                 .isThrownBy(() -> roverService.createRover("1 2 F", plateau));
         assertThatExceptionOfType(Exception.class).isThrownBy(() -> roverService.createRover("S 2 F", plateau));
     }
@@ -42,9 +42,9 @@ class RoverServiceTest {
 
         roverService.processInstruction(rover, "LMLMLMLMM");
 
-        assertThat(rover.getPosition().x()).isEqualTo(1);
-        assertThat(rover.getPosition().y()).isEqualTo(3);
-        assertThat(rover.getHeading()).isEqualTo(NORTH);
+        assertThat(rover.getCoordinate().x()).isEqualTo(1);
+        assertThat(rover.getCoordinate().y()).isEqualTo(3);
+        assertThat(rover.getDirection()).isEqualTo(NORTH);
     }
 
     @Test
@@ -54,7 +54,7 @@ class RoverServiceTest {
 
         assertThatExceptionOfType(UnknownInstructionException.class)
                 .isThrownBy(() -> roverService.processInstruction(rover, "LMJYK"));
-        assertThatExceptionOfType(PositionNotOnPlateauException.class)
+        assertThatExceptionOfType(CoordinateNotOnPlateauException.class)
                 .isThrownBy(() -> roverService.processInstruction(rover, "LMMMMMMMMM"));
     }
 }

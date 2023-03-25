@@ -1,17 +1,33 @@
 package org.nasa.mars.rovers.model;
 
+import org.nasa.mars.rovers.exception.CoordinateNotOnPlateauException;
+import org.nasa.mars.rovers.exception.CoordinateOccupiedException;
+
 import java.util.*;
 
-public record Plateau(int dimX, int dimY, List<Rover> rovers) {
+public record Plateau(int width, int height, List<Rover> rovers) {
 
-	public Plateau addRover(Rover rover) {
+	public Plateau drop(Rover rover) {
 		this.rovers.add(rover);
 		return this;
 	}
-	
-	public boolean isOccupied(Rover rover) {
-		return this.rovers.stream()
-				.filter(otherRover -> !otherRover.equals(rover))
-				.anyMatch(otherRover -> otherRover.hasPosition(rover.getPosition()));
+
+	public void checkCoordinate(Coordinate coordinate) {
+		if (!this.coordinateInPlateau(coordinate)) {
+			throw new CoordinateNotOnPlateauException();
+		}
+		if (!this.coordinateNotOccupied(coordinate)) {
+			throw new CoordinateOccupiedException();
+		}
+	}
+
+	private boolean coordinateInPlateau(Coordinate coordinate) {
+		return coordinate.x() >= 0 && coordinate.x() <= width && coordinate.y() >= 0 && coordinate.y() <= height;
+	}
+
+	private boolean coordinateNotOccupied(Coordinate coordinate) {
+		return this.rovers
+				.stream()
+				.noneMatch(droppedRover -> droppedRover.getCoordinate().equals(coordinate));
 	}
 }

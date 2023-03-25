@@ -1,6 +1,5 @@
 package org.nasa.mars.rovers;
 
-import lombok.RequiredArgsConstructor;
 import org.nasa.mars.rovers.service.PlateauService;
 import org.nasa.mars.rovers.service.RoverService;
 import org.springframework.boot.CommandLineRunner;
@@ -12,12 +11,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 
-@RequiredArgsConstructor
 @Component
-public class RoversCommandLineRunner implements CommandLineRunner {
-    private final PlateauService plateauService;
-    private final RoverService roverService;
-
+public record RoversCommandLineRunner(PlateauService plateauService, RoverService roverService) implements CommandLineRunner {
     private static final String quitter = "q";
 
     @Override

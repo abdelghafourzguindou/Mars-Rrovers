@@ -11,22 +11,22 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 public enum Instruction {
-	LEFT('L'), RIGHT('R'), MOVE('M');
+	LEFT("L"), RIGHT("R"), MOVE("M");
 
-	private final char letter;
+	private final String code;
 
-	public static List<Instruction> translate(String command) {
+	public static List<Instruction> toList(String command) {
 		return command.chars()
-				.mapToObj(letter -> (char)letter)
-				.map(Instruction::mapInstruction)
+				.mapToObj(letter -> String.valueOf((char)letter))
+				.map(Instruction::map)
 				.collect(Collectors.toList());
 	}
 
-	private static Instruction mapInstruction(char letter) {
+	private static Instruction map(String code) {
 		return EnumSet.allOf(Instruction.class)
 				.stream()
-				.filter(instruction -> instruction.getLetter() == letter)
+				.filter(instruction -> instruction.getCode().equals(code))
 				.findFirst()
-				.orElseThrow(() -> new UnknownInstructionException(letter));
+				.orElseThrow(() -> new UnknownInstructionException(code));
 	}
 }
