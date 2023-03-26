@@ -22,7 +22,7 @@ class RoverServiceTest {
         assertThat(rover.getCoordinate().x()).isEqualTo(1);
         assertThat(rover.getCoordinate().y()).isEqualTo(2);
         assertThat(rover.getDirection()).isEqualTo(NORTH);
-        assertThat(rover).isIn(plateau.rovers());
+        assertThat(rover).isIn(plateau.movables());
     }
 
     @Test

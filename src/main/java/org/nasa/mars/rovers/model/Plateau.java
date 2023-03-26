@@ -5,11 +5,15 @@ import org.nasa.mars.rovers.exception.CoordinateOccupiedException;
 
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public record Plateau(int width, int height, ConcurrentLinkedDeque<Rover> rovers) {
+public record Plateau(int width, int height, ConcurrentLinkedDeque<Movable> movables) {
 
-	public Plateau drop(Rover rover) {
-		this.rovers.add(rover);
+	public Plateau drop(Movable movable) {
+		this.movables.add(movable);
 		return this;
+	}
+
+	public static Plateau of(int width, int height) {
+		return new Plateau(width, height, new ConcurrentLinkedDeque<>());
 	}
 
 	public void checkCoordinate(Coordinate coordinate) {
@@ -26,8 +30,6 @@ public record Plateau(int width, int height, ConcurrentLinkedDeque<Rover> rovers
 	}
 
 	private boolean coordinateNotOccupied(Coordinate coordinate) {
-		return this.rovers
-				.stream()
-				.noneMatch(droppedRover -> droppedRover.getCoordinate().equals(coordinate));
+		return this.movables.stream().noneMatch(movable -> movable.getCoordinate().equals(coordinate));
 	}
 }
