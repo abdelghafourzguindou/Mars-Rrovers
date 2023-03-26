@@ -4,10 +4,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
- * The "Utils" class provides a set of utility methods that can be used in various parts of an application.
+ * The "CommonUtil" class provides a set of utility methods that can be used in various parts of an application.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Utils {
+public final class CommonUtil {
     /**
      * Used delimiter to read informations about plateau, movable and instructions
 

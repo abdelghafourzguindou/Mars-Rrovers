@@ -3,7 +3,7 @@ package org.nasa.mars.rovers.service;
 import org.nasa.mars.rovers.model.Plateau;
 import org.springframework.stereotype.Service;
 
-import static org.nasa.mars.rovers.utils.Utils.delimiter;
+import static org.nasa.mars.rovers.utils.CommonUtil.delimiter;
 
 @Service
 public record PlateauService() {

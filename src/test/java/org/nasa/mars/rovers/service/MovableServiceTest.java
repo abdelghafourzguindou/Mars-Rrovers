@@ -10,9 +10,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.nasa.mars.rovers.model.Direction.NORTH;
 
-class RoverServiceTest {
+class MovableServiceTest {
 
-    private final RoverService roverService = new RoverService();
+    private final MovableService roverService = new MovableService();
 
     @Test
     void createRover() {
