@@ -6,6 +6,9 @@ import org.nasa.mars.rovers.exception.UnknownDirectionException;
 
 import java.util.EnumSet;
 
+/**
+ * The Direction class represents the four cardinal directions: North, East, South, and West.
+ */
 @AllArgsConstructor
 @Getter
 public enum Direction {
@@ -13,6 +16,11 @@ public enum Direction {
 
 	private final String code;
 
+	/**
+	 * Map a given string to a heading
+	 * @param code a character
+	 * @return Direction else throw an UnknownDirectionException
+	 */
 	public static Direction map(String code) {
 		return EnumSet.allOf(Direction.class)
 				.stream()
@@ -21,6 +29,10 @@ public enum Direction {
 				.orElseThrow(() -> new UnknownDirectionException(code));
 	}
 
+	/**
+	 * Turn left operation
+	 * @return Direction
+	 */
 	public Direction left() {
 		return switch (this) {
 			case EAST -> NORTH;
@@ -30,6 +42,10 @@ public enum Direction {
 		};
 	}
 
+	/**
+	 * Turn right operation
+	 * @return Direction
+	 */
 	public Direction right() {
 		return switch (this) {
 			case EAST -> SOUTH;

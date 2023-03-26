@@ -3,6 +3,11 @@ package org.nasa.mars.rovers.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * A NASA rover is a robotic vehicle designed to explore the surface of other planets, moons, or asteroids.
+ * NASA has sent several rovers to Mars, including the Sojourner, Spirit, Opportunity, and Curiosity rovers,
+ * which have all made significant discoveries on the Red Planet.
+ */
 @AllArgsConstructor
 @Getter
 public class Rover implements Movable {
@@ -28,14 +33,19 @@ public class Rover implements Movable {
 
 	@Override
 	public void move() {
-		this.coordinate = moveForward();
+		this.coordinate = this.moveForward();
 	}
 
 	@Override
 	public String printInfo() {
-		return coordinate.toString() + " " + direction.getCode();
+		return this.coordinate.toString() + " " + this.direction.getCode();
 	}
 
+	/**
+	 * Check if a rover has the given coordinate
+	 * @param coordinate to check
+	 * @return true, else false
+	 */
 	public boolean hasPosition(Coordinate coordinate) {
 		return this.coordinate.equals(coordinate);
 	}
@@ -45,6 +55,10 @@ public class Rover implements Movable {
 		plateau.drop(this);
 	}
 
+	/**
+	 * Move forward one grid point, and maintain the same heading. Assume that the square directly North from (x, y) is (x, y+1).
+	 * @return Coordinate or throw CoordinateNotOnPlateauException or CoordinateOccupiedException
+	 */
 	private Coordinate moveForward() {
 		Coordinate newCoordinate = switch (direction) {
 			case EAST -> new Coordinate(coordinate.x() + 1, coordinate.y());

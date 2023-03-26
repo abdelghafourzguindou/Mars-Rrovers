@@ -17,6 +17,13 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * RoversCommandLineRunner class is component to create a command line server application
+ * By running a socket server in the port 80 you can interact with it and create a simulation
+ *
+ * @param plateauService
+ * @param roverService
+ */
 @Component
 public record RoversCommandLineRunner(PlateauService plateauService, RoverService roverService) implements Simulation, CommandLineRunner {
 
@@ -40,6 +47,12 @@ public record RoversCommandLineRunner(PlateauService plateauService, RoverServic
         }
     }
 
+    /**
+     * Interact with a user and create a suite of objects (rover, instruction) and return a set of workers
+     * @param in input
+     * @param out output
+     * @return List<Worker> or throw a RuntimeException
+     */
     private List<Worker> createWorkers(BufferedReader in, PrintWriter out) {
         var workers = new ArrayList<Worker>();
         try {

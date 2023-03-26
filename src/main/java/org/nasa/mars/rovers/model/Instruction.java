@@ -8,6 +8,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The Instruction enum represents the three operations: turn left, turn right, and move
+ */
 @AllArgsConstructor
 @Getter
 public enum Instruction {
@@ -15,6 +18,11 @@ public enum Instruction {
 
 	private final String code;
 
+	/**
+	 * Map a string of instructions to a list of Instructions
+	 * @param command string command
+	 * @return List<Instruction> or throw a UnknownInstructionException
+	 */
 	public static List<Instruction> toList(String command) {
 		return command.chars()
 				.mapToObj(letter -> String.valueOf((char)letter))
@@ -22,6 +30,11 @@ public enum Instruction {
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Map a single code 'character' to Instruction
+	 * @param code character
+	 * @return Instruction or throw UnknownInstructionException
+	 */
 	private static Instruction map(String code) {
 		return EnumSet.allOf(Instruction.class)
 				.stream()
