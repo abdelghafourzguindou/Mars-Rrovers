@@ -19,9 +19,11 @@ public class FileSimulationRunner implements Simulation, CommandLineRunner {
     public void run(String... args) {
         var parser = new SimulationFileParser(new SimulationFileReader(file));
         var plateau = parser.parsePlateau();
-        var movables = parser.parseMovables(plateau);
+        var movables = parser.parseMovables();
         var instructions = parser.parseInstructions();
         var workers = parser.makeWorkers(movables, instructions);
+
+        movables.parallelStream().forEach(movable -> movable.drop(plateau));
 
         this.run(workers).forEach(movable -> System.out.println(movable.printInfo()));
     }

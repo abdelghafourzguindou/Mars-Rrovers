@@ -11,10 +11,16 @@ public interface Movable {
     /**
       * Drop operation to add a movable into the plateau
      */
-    void drop();
+    default void drop(Plateau plateau) {
+        plateau.deploy(this);
+        setPlateau(plateau);
+    }
+
     void turnLeft();
     void turnRight();
     void move();
+    void setPlateau(Plateau plateau);
+    Plateau getPlateau();
     Coordinate getCoordinate();
     Direction getDirection();
     String printInfo();
@@ -25,7 +31,7 @@ public interface Movable {
      * @return Movable in the new state
      */
     default Movable process(List<Instruction> instructions) {
-        if (this.getCoordinate() == null || this.getDirection() == null) {
+        if (this.getCoordinate() == null || this.getDirection() == null || this.getPlateau() == null) {
             throw new RoverNotDroppedException();
         }
         instructions.forEach(this::execute);

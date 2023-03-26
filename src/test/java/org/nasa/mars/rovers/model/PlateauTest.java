@@ -6,6 +6,8 @@ import org.nasa.mars.rovers.exception.CoordinateOccupiedException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.nasa.mars.rovers.model.Direction.EAST;
+import static org.nasa.mars.rovers.model.Direction.NORTH;
 
 class PlateauTest {
 
@@ -21,12 +23,12 @@ class PlateauTest {
 
     @Test
     void should_drop_movable() {
-        var coordinate = new Coordinate(1, 2);
         var plateau = Plateau.of(5, 5);
-        var rover1 = new Rover(coordinate, Direction.NORTH, plateau);
-        var rover2 = new Rover(coordinate, Direction.NORTH, plateau);
+        var rover1 = Rover.createAt(1, 2, NORTH);
+        var rover2 = Rover.createAt(1, 5, EAST);
 
-        plateau.drop(rover1).drop(rover2);
+        rover1.drop(plateau);
+        rover2.drop(plateau);
 
         assertThat(rover1).isIn(plateau.movables());
         assertThat(rover2).isIn(plateau.movables());
@@ -34,12 +36,12 @@ class PlateauTest {
 
     @Test
     void checkCoordinate_should_throw_CoordinateOccupiedException() {
-        var coordinate = new Coordinate(1, 2);
         var plateau = Plateau.of(5, 5);
 
-        new Rover(coordinate, Direction.NORTH, plateau).drop();
+        var rover = Rover.createAt(1, 2, NORTH);
+        rover.drop(plateau);
 
-        assertThatExceptionOfType(CoordinateOccupiedException.class).isThrownBy(() -> plateau.checkCoordinate(coordinate));
+        assertThatExceptionOfType(CoordinateOccupiedException.class).isThrownBy(() -> plateau.checkCoordinate(rover.getCoordinate()));
     }
 
     @Test

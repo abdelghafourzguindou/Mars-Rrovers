@@ -74,7 +74,8 @@ public class ServerSimulationRunner implements Simulation, CommandLineRunner {
             var infos = in.readLine();
 
             while (!CommonUtil.quitter.equals(infos)) {
-                var rover = roverService.createRover(infos.toUpperCase(), plateau);
+                var rover = roverService.createRover(infos.toUpperCase());
+                rover.drop(plateau);
                 infos = in.readLine();
                 workers.add(new Worker(rover, Instruction.toList(infos.toUpperCase())));
                 infos = in.readLine();

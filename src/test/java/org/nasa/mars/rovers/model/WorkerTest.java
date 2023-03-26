@@ -14,12 +14,11 @@ class WorkerTest {
     @Test
     void should_start_worker_and_process() {
         var plateau = Plateau.of(5, 5);
-        var coordinate = new Coordinate(1, 2);
-        var rover = new Rover(coordinate, NORTH, plateau);
+        var rover = Rover.createAt(1, 2, NORTH);
         var instructions = List.of(LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, LEFT, MOVE, MOVE);
         var worker = new Worker(rover, instructions);
 
-        rover.drop();
+        rover.drop(plateau);
         worker.start();
 
         assertThat(rover.getCoordinate().x()).isEqualTo(1);

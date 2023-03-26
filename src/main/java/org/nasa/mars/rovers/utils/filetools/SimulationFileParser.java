@@ -1,6 +1,5 @@
 package org.nasa.mars.rovers.utils.filetools;
 
-import org.nasa.mars.rovers.model.Coordinate;
 import org.nasa.mars.rovers.model.Direction;
 import org.nasa.mars.rovers.model.Instruction;
 import org.nasa.mars.rovers.model.Movable;
@@ -25,12 +24,12 @@ public record SimulationFileParser(SimulationFileReader reader) {
         return Plateau.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
     }
 
-    public List<Movable> parseMovables(Plateau plateau) {
+    public List<Movable> parseMovables() {
         return reader.getLines()
                 .get()
                 .skip(1)
                 .filter(line -> Character.isDigit(line.charAt(0)))
-                .map(extractMovable(plateau))
+                .map(extractMovable())
                 .toList();
     }
 
@@ -49,12 +48,13 @@ public record SimulationFileParser(SimulationFileReader reader) {
                 .toList();
     }
 
-    private static Function<String, Movable> extractMovable(Plateau plateau) {
+    private static Function<String, Movable> extractMovable() {
         return line -> {
             var data = line.split(CommonUtil.delimiter);
-            var coordinate = new Coordinate(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+            var x = Integer.parseInt(data[0]);
+            var y = Integer.parseInt(data[1]);
             var direction = Direction.map(data[2]);
-            return new Rover(coordinate, direction, plateau);
+            return Rover.createAt(x, y, direction);
         };
     }
 }

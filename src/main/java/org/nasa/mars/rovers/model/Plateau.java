@@ -14,11 +14,12 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public record Plateau(int width, int height, ConcurrentLinkedDeque<Movable> movables) {
 
 	/**
-	 * Drop a movable into the plateau
+	 * Deploy a movable into the plateau
 	 * @param movable like Rover
 	 * @return the new state of the plateau
 	 */
-	public Plateau drop(Movable movable) {
+	public Plateau deploy(Movable movable) {
+		this.checkCoordinate(movable.getCoordinate());
 		this.movables.add(movable);
 		return this;
 	}

@@ -26,7 +26,7 @@ class SimulationFileParserTest {
     @Test
     void should_parse_movable() {
         var plateau = parser.parsePlateau();
-        var movables = parser.parseMovables(plateau);
+        var movables = parser.parseMovables();
 
         assertThat(movables).isNotEmpty();
     }
@@ -41,7 +41,7 @@ class SimulationFileParserTest {
     @Test
     void should_make_workers() {
         var plateau = parser.parsePlateau();
-        var movables = parser.parseMovables(plateau);
+        var movables = parser.parseMovables();
         var instructions = parser.parseInstructions();
         var workers = parser.makeWorkers(movables, instructions);
 
