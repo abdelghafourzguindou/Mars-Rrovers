@@ -12,7 +12,7 @@ import static org.nasa.mars.rovers.model.Direction.NORTH;
 
 class RoverServiceTest {
 
-    private final RoverService roverService = new RoverService();
+    private final MovableService roverService = new MovableService();
 
     @Test
     void createRover() {

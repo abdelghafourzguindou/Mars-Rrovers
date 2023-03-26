@@ -5,3 +5,9 @@ spring:
 logging:
   level:
     root: OFF
+
+simulation:
+  server:
+    port: 100
+  file:
+    name: "file.txt"

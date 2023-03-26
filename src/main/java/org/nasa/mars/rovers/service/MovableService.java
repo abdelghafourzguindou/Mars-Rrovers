@@ -6,10 +6,10 @@ import org.nasa.mars.rovers.model.Coordinate;
 import org.nasa.mars.rovers.model.Rover;
 import org.springframework.stereotype.Service;
 
-import static org.nasa.mars.rovers.utils.Utils.delimiter;
+import static org.nasa.mars.rovers.utils.CommonUtil.delimiter;
 
 @Service
-public record RoverService() {
+public record MovableService() {
 
     public Rover createRover(String infos, Plateau plateau) {
         var roverInfos = infos.toUpperCase().split(delimiter);
