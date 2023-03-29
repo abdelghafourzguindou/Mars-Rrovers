@@ -15,13 +15,12 @@ public record Plateau(int width, int height, ConcurrentLinkedDeque<Movable> mova
 
 	/**
 	 * Deploy a movable into the plateau
+	 *
 	 * @param movable like Rover
-	 * @return the new state of the plateau
 	 */
-	public Plateau deploy(Movable movable) {
+	public void deploy(Movable movable) {
 		this.checkCoordinate(movable.getCoordinate());
 		this.movables.add(movable);
-		return this;
 	}
 
 	/**

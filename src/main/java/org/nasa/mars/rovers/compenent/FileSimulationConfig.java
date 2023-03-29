@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FileSimulationConfig {
+
     @Value("${simulation.file.name}")
     private String file;
 
