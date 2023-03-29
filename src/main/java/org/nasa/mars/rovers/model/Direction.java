@@ -12,6 +12,7 @@ import java.util.EnumSet;
 @AllArgsConstructor
 @Getter
 public enum Direction {
+
 	NORTH("N"), EAST("E"), SOUTH("S"), WEST("W");
 
 	private final String code;
