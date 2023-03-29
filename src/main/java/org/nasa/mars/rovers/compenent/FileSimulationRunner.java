@@ -1,30 +1,23 @@
 package org.nasa.mars.rovers.compenent;
 
-import org.nasa.mars.rovers.model.Simulation;
-import org.nasa.mars.rovers.utils.filetools.SimulationFileParser;
-import org.nasa.mars.rovers.utils.filetools.SimulationFileReader;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.nasa.mars.rovers.service.Simulation;
+import org.nasa.mars.rovers.service.SimulationFileParser;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 @Profile("file")
-public class FileSimulationRunner implements Simulation, CommandLineRunner {
+public class FileSimulationRunner implements CommandLineRunner {
 
-    @Value("${simulation.file.name}")
-    private String file;
+    private final SimulationFileParser simulationFileParser;
+    private final Simulation simulation;
 
     @Override
     public void run(String... args) {
-        var parser = new SimulationFileParser(new SimulationFileReader(file));
-        var plateau = parser.parsePlateau();
-        var movables = parser.parseMovables();
-        var instructions = parser.parseInstructions();
-        var workers = parser.makeWorkers(movables, instructions);
-
-        movables.parallelStream().forEach(movable -> movable.drop(plateau));
-
-        this.run(workers).forEach(movable -> System.out.println(movable.printInfo()));
+        var workers = simulation.create(simulationFileParser);
+        simulation.run(workers).forEach(movable -> System.out.println(movable.printInfo()));
     }
 }

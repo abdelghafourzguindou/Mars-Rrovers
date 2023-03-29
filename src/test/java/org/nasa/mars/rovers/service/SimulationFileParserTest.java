@@ -1,4 +1,4 @@
-package org.nasa.mars.rovers.utils.filetools;
+package org.nasa.mars.rovers.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class SimulationFileParserTest {
         var plateau = parser.parsePlateau();
         var movables = parser.parseMovables();
         var instructions = parser.parseInstructions();
-        var workers = parser.makeWorkers(movables, instructions);
+        var workers = parser.createWorkers(movables, instructions);
 
         assertThat(workers).isNotEmpty();
     }

@@ -1,5 +1,6 @@
-package org.nasa.mars.rovers.utils.filetools;
+package org.nasa.mars.rovers.service;
 
+import lombok.AllArgsConstructor;
 import org.nasa.mars.rovers.model.Direction;
 import org.nasa.mars.rovers.model.Instruction;
 import org.nasa.mars.rovers.model.Movable;
@@ -10,12 +11,16 @@ import org.nasa.mars.rovers.utils.CommonUtil;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public record SimulationFileParser(SimulationFileReader reader) {
+@AllArgsConstructor
+public class SimulationParser {
+    private final Supplier<Stream<String>> config;
 
     public Plateau parsePlateau() {
-        var data = reader.getLines()
+        var data = config
                 .get()
                 .findFirst()
                 .orElseThrow()
@@ -25,7 +30,7 @@ public record SimulationFileParser(SimulationFileReader reader) {
     }
 
     public List<Movable> parseMovables() {
-        return reader.getLines()
+        return config
                 .get()
                 .skip(1)
                 .filter(line -> Character.isDigit(line.charAt(0)))
@@ -34,7 +39,7 @@ public record SimulationFileParser(SimulationFileReader reader) {
     }
 
     public List<List<Instruction>> parseInstructions() {
-        return reader.getLines()
+        return config
                 .get()
                 .skip(1)
                 .filter(line -> Character.isAlphabetic(line.charAt(0)))
@@ -42,7 +47,7 @@ public record SimulationFileParser(SimulationFileReader reader) {
                 .toList();
     }
 
-    public List<Worker> makeWorkers(List<Movable> movables, List<List<Instruction>> instructions) {
+    public List<Worker> createWorkers(List<Movable> movables, List<List<Instruction>> instructions) {
         return IntStream.range(0, movables.size())
                 .mapToObj(index -> new Worker(movables.get(index), instructions.get(index)))
                 .toList();

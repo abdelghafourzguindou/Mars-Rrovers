@@ -1,4 +1,8 @@
-package org.nasa.mars.rovers.model;
+package org.nasa.mars.rovers.service;
+
+import org.nasa.mars.rovers.model.Movable;
+import org.nasa.mars.rovers.model.Plateau;
+import org.nasa.mars.rovers.model.Worker;
 
 import java.util.List;
 
@@ -10,6 +14,15 @@ import java.util.List;
 public interface Simulation {
 
     /**
+     * Drop a set of movable into a plateau
+     * @param movables list
+     * @param plateau to drop on
+     */
+    default void drop(List<Movable> movables, Plateau plateau) {
+        movables.parallelStream().forEach(movable -> movable.drop(plateau));
+    }
+
+    /**
      * Run a list of worker to get the final state of rovers
      * @param workers list of movable, instructions entry
      * @return future state of the movable
@@ -17,4 +30,6 @@ public interface Simulation {
     default List<Movable> run(List<Worker> workers) {
         return workers.stream().map(Worker::start).toList();
     }
+
+    List<Worker> create(SimulationParser simulationParser);
 }

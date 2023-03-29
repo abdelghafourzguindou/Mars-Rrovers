@@ -11,3 +11,21 @@ simulation:
     port: 100
   file:
     name: "file.txt"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: web
+  main:
+    banner-mode: console
+    web-application-type: servlet
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
+    root: info
